@@ -5,8 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import dagger.hilt.android.AndroidEntryPoint
 import io.gitalive.composeweather.ui.AppViewModel
 import io.gitalive.composeweather.ui.navigation.ComposeWeatherNavHost
@@ -20,7 +21,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val appViewModel: AppViewModel = hiltViewModel()
+            val appViewModel: AppViewModel = hiltViewModel(
+                checkNotNull(LocalViewModelStoreOwner.current) {
+                        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+                    },
+                null
+            )
             val settings by appViewModel.settings.collectAsStateWithLifecycle()
             ComposeWeatherTheme(darkTheme = settings.themeMode.resolveDark()) {
                 ComposeWeatherNavHost()
