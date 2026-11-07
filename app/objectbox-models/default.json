@@ -1,0 +1,101 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3850096880920344874",
+      "lastPropertyId": "9:8072375222463506167",
+      "name": "CityEntity",
+      "properties": [
+        {
+          "id": "1:4339088393592297157",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4915505113940837276",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3728825585177920288",
+          "name": "latitude",
+          "type": 8
+        },
+        {
+          "id": "4:8357925948326726321",
+          "name": "longitude",
+          "type": 8
+        },
+        {
+          "id": "5:5692924679646750362",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "6:550234478593560210",
+          "name": "admin1",
+          "type": 9
+        },
+        {
+          "id": "7:4724838587769666814",
+          "name": "isSelected",
+          "type": 1
+        },
+        {
+          "id": "8:8908097870900887948",
+          "name": "savedAt",
+          "type": 6
+        },
+        {
+          "id": "9:8072375222463506167",
+          "name": "isCurrentLocation",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:5782447613909873768",
+      "lastPropertyId": "4:8418314006848574322",
+      "name": "WeatherCacheEntity",
+      "properties": [
+        {
+          "id": "1:3783030623853940446",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8272827662728871855",
+          "name": "cityKey",
+          "type": 9
+        },
+        {
+          "id": "3:4444221136215668144",
+          "name": "payload",
+          "type": 9
+        },
+        {
+          "id": "4:8418314006848574322",
+          "name": "updatedAt",
+          "type": 6
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:5782447613909873768",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

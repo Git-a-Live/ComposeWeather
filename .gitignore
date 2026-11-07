@@ -1,0 +1,12 @@
+*.iml
+.gradle
+local.properties
+.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# WorkBuddy 本地记忆与临时产物，不进版本库
+.workbuddy/

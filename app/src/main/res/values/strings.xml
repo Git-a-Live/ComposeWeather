@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ComposeWeather</string>
+    <string name="widget_label">天气小组件</string>
+    <string name="widget_description">展示当前城市的实时天气，支持自由调整尺寸</string>
+</resources>
