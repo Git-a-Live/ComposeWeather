@@ -9,6 +9,15 @@
 ![Compose](https://img.shields.io/badge/Compose-BOM%202026.09.00-4285F4)
 ![minSdk](https://img.shields.io/badge/minSdk-30-brightgreen)
 
+## 界面
+
+<p align="center">
+  <img src="docs/screenshots/home.png" width="240" alt="首页" />
+  <img src="docs/screenshots/forecast.png" width="240" alt="7 天预报" />
+  <img src="docs/screenshots/settings.png" width="240" alt="设置" />
+  <img src="docs/screenshots/search.png" width="240" alt="城市搜索" />
+</p>
+
 ## 功能
 
 - **实况天气**：温度、体感、天气现象、湿度、风速、气压、紫外线
