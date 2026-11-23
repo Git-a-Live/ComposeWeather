@@ -1,6 +1,6 @@
 package io.gitalive.composeweather.domain.model
 
-/** 城市坐标，id 为 ObjectBox 主键，未入库时为 0。 */
+/** 城市坐标，id 为 Room 自增主键，未入库时为 0。 */
 data class City(
     val id: Long = 0L,
     val name: String,

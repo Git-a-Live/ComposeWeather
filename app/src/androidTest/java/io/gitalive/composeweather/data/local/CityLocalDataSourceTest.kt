@@ -1,11 +1,10 @@
 package io.gitalive.composeweather.data.local
 
 import android.content.Context
+import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.gitalive.composeweather.data.local.entity.MyObjectBox
 import io.gitalive.composeweather.domain.model.City
-import io.objectbox.BoxStore
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -17,27 +16,24 @@ import org.junit.runner.RunWith
 import kotlin.math.abs
 
 /**
- * 用内存库跑真实的 ObjectBox 读写，验证事务内的选中与去重逻辑。
+ * 用内存库跑真实的 Room 读写，验证事务内的选中与去重逻辑。
  */
 @RunWith(AndroidJUnit4::class)
 class CityLocalDataSourceTest {
 
-    private lateinit var store: BoxStore
+    private lateinit var database: AppDatabase
     private lateinit var dataSource: CityLocalDataSource
 
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        store = MyObjectBox.builder()
-            .androidContext(context)
-            .inMemory("test" + System.nanoTime())
-            .build()
-        dataSource = CityLocalDataSource(store)
+        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        dataSource = CityLocalDataSource(database, database.cityDao())
     }
 
     @After
     fun tearDown() {
-        store.close()
+        database.close()
     }
 
     @Test

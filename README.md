@@ -1,6 +1,6 @@
 # ComposeWeather
 
-一个用来实践现代 Android 开发（MAD）的天气应用：**Jetpack Compose + MVI 单向数据流 + Hilt + ObjectBox + DataStore + Glance 桌面小组件**。
+一个用来实践现代 Android 开发（MAD）的天气应用：**Jetpack Compose + MVI 单向数据流 + Hilt + Room + DataStore + Glance 桌面小组件**。
 
 天气数据来自 [Open-Meteo](https://open-meteo.com/)，**不需要申请 API Key**，克隆下来配好 JDK 即可直接运行。
 
@@ -23,7 +23,7 @@
 - **实况天气**：温度、体感、天气现象、湿度、风速、气压、紫外线
 - **24 小时温度曲线**：Canvas 手绘，含渐变填充、自适应纵轴与分段标签
 - **逐小时横滑** + **7 天预报**（降水概率、温度区间条、日出日落）
-- **城市搜索**（输入防抖 350ms）+ 收藏管理，本地落在 ObjectBox
+- **城市搜索**（输入防抖 350ms）+ 收藏管理，本地落在 Room
 - **定位自动切换**：冷启动时优先取当前位置，失败降级为「当前位置」并保留上次选中城市
 - **个性化设置**：温度单位（℃/℉）、主题（跟随系统/浅色/深色）、自动刷新间隔，存 DataStore
 - **桌面小组件**：Glance 实现，支持横向/纵向自由调整尺寸，尺寸变小自动精简内容
@@ -36,7 +36,7 @@
 | UI | Jetpack Compose + Material 3 | 声明式界面，无 XML 布局 |
 | 架构 | MVI（StateFlow + Channel） | `Intent` 单向进入、`State` 单一数据源、`Effect` 一次性事件 |
 | DI | Hilt 2.60.1 | `@HiltViewModel`、`@Binds`、`@Qualifier` 区分两套 Retrofit |
-| 本地库 | ObjectBox 5.4.2 | 收藏城市、天气报文缓存、当前定位城市 |
+| 本地库 | Room 2.8.5 | 收藏城市、天气报文缓存、当前定位城市 |
 | 偏好 | DataStore 1.3.0 | 单位、主题、刷新间隔、自动定位开关 |
 | 网络 | Retrofit 3.0.0 + OkHttp 5.5.1 + kotlinx.serialization | 预报与地理编码两套接口 |
 | 组件 | Glance 1.2.0 | Compose 风格的 AppWidget |
@@ -52,7 +52,7 @@ flowchart LR
     VM -- "Effect (Channel)" --> UI
     VM --> Repo["WeatherRepository"]
     Repo --> Remote["Open-Meteo API"]
-    Repo --> DB[("ObjectBox")]
+    Repo --> DB[("Room")]
     Repo --> Prefs[("DataStore")]
     Widget["Glance 小组件"] --> Repo
 ```
@@ -69,7 +69,7 @@ flowchart LR
 app/src/main/java/io/gitalive/composeweather/
 ├── core/mvi/           MviViewModel 基类
 ├── data/
-│   ├── local/          ObjectBox 实体与数据源、SettingsDataStore
+│   ├── local/          Room 实体、DAO 与数据源、SettingsDataStore
 │   ├── location/       LocationManager + Geocoder 封装
 │   ├── mapper/         DTO → 领域模型
 │   ├── remote/         Retrofit 接口与 DTO
@@ -104,7 +104,7 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
 - **18 个 JVM 单测**：DTO 映射（缺字段、跨天截取、缓存键精度）、温度换算、ViewModel（空收藏落默认城市、定位优先、刷新失败保留数据、切换城市）
-- **10 个插桩测试**：ObjectBox 内存库真实读写（去重、选中互斥、定位复用附近收藏）、Compose 界面渲染与交互（首页、错误重试、定位引导、设置页入口）
+- **10 个插桩测试**：Room 内存库真实读写（去重、选中互斥、定位复用附近收藏）、Compose 界面渲染与交互（首页、错误重试、定位引导、设置页入口）
 
 写测试时的两个坑，代码里都有注释：
 
@@ -113,8 +113,8 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ## 实现取舍
 
-- **用 kapt 而不是 KSP**：ObjectBox 5.4.2 稳定版只支持 kapt（KSP 支持仍在 6.0 beta），Hilt 与 ObjectBox 同时挂两套注解处理器没有收益，统一走 AGP 自带的 `com.android.legacy-kapt`。
-- **关闭 configuration cache**：ObjectBox 的 `objectboxPrepareBuild` 任务持有 `Project` 引用无法序列化，与 configuration cache 不兼容。
+- **统一用 KSP**：Room 与 Hilt 的代码生成都走 KSP，注解处理只有一个入口，省掉 kapt 的 stub 生成与二次编译；KSP 2.3.14 对应 Kotlin 2.4.x，与 AGP 9.5.1、Gradle 9.6 匹配。
+- **导出 Room schema**：`app/schemas/` 下的 JSON 随代码提交，作为后续表结构迁移的比对基线；改表时递增 `version` 并补迁移。
 - **不使用图片加载库**：天气图元全部用 Canvas 绘制，界面图标取自 `material-icons-core` 的矢量路径，项目里没有一张图片资源，也就没有引入 Coil 的必要。
 - **定位降级链路**：网络 provider 优先 → GPS → `getLastKnownLocation` → 反查失败则显示「当前位置」。国内无 GMS，没有使用 FusedLocationProvider。
 - **小组件取依赖**：`GlanceAppWidget` 不在 Hilt 的注入体系中，通过 `@EntryPoint` + `EntryPointAccessors.fromApplication` 获取仓库。
@@ -123,4 +123,4 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 - 天气与地理编码数据：[Open-Meteo](https://open-meteo.com/)，遵循 **CC BY 4.0**，需署名（App 内「关于」页与首页页脚已标注）
 - 本项目代码：[MIT License](LICENSE)
-- 第三方组件遵循各自许可：Jetpack Compose / Hilt / Glance / Material Icons / ObjectBox 均为 Apache License 2.0
+- 第三方组件遵循各自许可：Jetpack Compose / Hilt / Glance / Material Icons / Room 均为 Apache License 2.0

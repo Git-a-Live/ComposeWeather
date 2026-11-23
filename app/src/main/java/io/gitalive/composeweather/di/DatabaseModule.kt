@@ -3,27 +3,35 @@ package io.gitalive.composeweather.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.gitalive.composeweather.data.local.entity.MyObjectBox
+import io.gitalive.composeweather.data.local.AppDatabase
+import io.gitalive.composeweather.data.local.dao.CityDao
+import io.gitalive.composeweather.data.local.dao.WeatherCacheDao
 import io.gitalive.composeweather.data.local.settingsDataStore
-import io.objectbox.BoxStore
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    /** ObjectBox 进程内只允许打开一个 Store，生命周期跟随 Application。 */
+    private const val DATABASE_NAME = "composeweather.db"
+
+    /** 数据库实例全进程共用，生命周期跟随 Application。 */
     @Provides
     @Singleton
-    fun provideBoxStore(@ApplicationContext context: Context): BoxStore =
-        MyObjectBox.builder()
-            .androidContext(context)
-            .build()
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
+        Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
+
+    @Provides
+    fun provideCityDao(database: AppDatabase): CityDao = database.cityDao()
+
+    @Provides
+    fun provideWeatherCacheDao(database: AppDatabase): WeatherCacheDao = database.weatherCacheDao()
 
     @Provides
     @Singleton

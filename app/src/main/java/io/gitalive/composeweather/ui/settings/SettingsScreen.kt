@@ -191,7 +191,7 @@ fun SettingsScreen(
                 AboutLine("数据来源", "Open-Meteo（CC BY 4.0，非商业免费额度）")
                 AboutLine("架构", "MVI 单向数据流 + Kotlin 协程")
                 AboutLine("依赖注入", "Hilt")
-                AboutLine("本地存储", "ObjectBox 存城市与天气缓存，DataStore 存偏好")
+                AboutLine("本地存储", "Room 存城市与天气缓存，DataStore 存偏好")
                 AboutLine("网络", "Retrofit + kotlinx.serialization + OkHttp")
             }
         }
