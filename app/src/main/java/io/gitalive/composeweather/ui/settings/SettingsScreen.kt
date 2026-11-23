@@ -68,7 +68,12 @@ fun SettingsRoute(
 @Composable
 fun SettingsScreen(
     state: SettingsUiState,
-    onIntent: (SettingsIntent) -> Unit
+    onIntent: (SettingsIntent) -> Unit,
+    /**
+     * 拉起系统固定小组件确认框，返回桌面是否支持该能力。
+     * 抽成参数是为了让界面测试注入假实现，避免真实拉起系统进程而夺走前台。
+     */
+    requestPinWidget: (Context) -> Boolean = { it.requestPinWeatherWidget() }
 ) {
     val settings = state.settings
     val context = LocalContext.current
@@ -173,7 +178,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = {
-                        val requested = context.requestPinWeatherWidget()
+                        val requested = requestPinWidget(context)
                         if (!requested) {
                             scope.launch {
                                 snackbarHostState.showSnackbar("当前桌面不支持固定小组件")

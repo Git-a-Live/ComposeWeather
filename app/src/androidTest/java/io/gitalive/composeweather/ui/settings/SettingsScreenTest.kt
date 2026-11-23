@@ -48,7 +48,12 @@ class SettingsScreenTest {
     fun clickingWidgetEntryDoesNotCrash() {
         composeRule.setContent {
             ComposeWeatherTheme(dynamicColor = false) {
-                SettingsScreen(state = SettingsUiState(), onIntent = {})
+                SettingsScreen(
+                    state = SettingsUiState(),
+                    onIntent = {},
+                    // 注入假实现，避免真实拉起 launcher 的固定小组件界面夺走前台
+                    requestPinWidget = { true }
+                )
             }
         }
 
