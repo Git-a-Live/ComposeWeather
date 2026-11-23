@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  自适应图标的单色层，供 Android 13+ 主题图标取色使用。
+  形状与前景层一致，仅保留剪影，系统会按壁纸取色重新着色。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M57,42L61,42M53.19,51.19L56.02,54.02M44,55L44,59M34.81,51.19L31.98,54.02M31,42L27,42M34.81,32.81L31.98,29.98M44,29L44,25M53.19,32.81L56.02,29.98"
+        android:strokeColor="#000000"
+        android:strokeLineCap="round"
+        android:strokeWidth="2.4" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M44,32C49.523,32 54,36.477 54,42C54,47.523 49.523,52 44,52C38.477,52 34,47.523 34,42C34,36.477 38.477,32 44,32Z" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M58,50C64.6276,50 70,55.3724 70,62C70,68.6276 64.6276,74 58,74C51.3724,74 46,68.6276 46,62C46,55.3724 51.3724,50 58,50Z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M71,61C74.8661,61 78,64.1339 78,68C78,71.8661 74.8661,75 71,75C67.1339,75 64,71.8661 64,68C64,64.1339 67.1339,61 71,61Z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M46,61C49.8661,61 53,64.1339 53,68C53,71.8661 49.8661,75 46,75C42.1339,75 39,71.8661 39,68C39,64.1339 42.1339,61 46,61Z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M43,68H74A4,4 0 0,1 78,72A4,4 0 0,1 74,76H43A4,4 0 0,1 39,72A4,4 0 0,1 43,68Z" />
+</vector>
